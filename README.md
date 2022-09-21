@@ -1,6 +1,22 @@
 # Focus-Project
 Python flask ile oluşturulmuş proje yönetim uygulaması
 
+## Mimari Yapı
+1. Api
+    + Dockerfile
+    - requirements.txt
+2. Webapp
+    + Dockerfile
+    - requirements.txt
+3. frontend-prototip
+    
+
+Burada Web app ,Veritabanı ve APİ bağımsız çalışmak zorunda olduğu için ayrı  servisler şeklinde  hazırladım.Frontend-prototip sadece arayüz için taslak olarak eklendi
+
+
+ 
+
+
 
 ## Çalışma takvimi
 
