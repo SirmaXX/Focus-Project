@@ -1,7 +1,0 @@
-flask
-psycopg2-binary
-Flask-SQLAlchemy
-typing
-fastapi
-pydantic
-uvicorn
