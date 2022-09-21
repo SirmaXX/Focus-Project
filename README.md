@@ -5,9 +5,9 @@ Python flask ile oluşturulmuş proje yönetim uygulaması
 ## Çalışma takvimi
 
 * Day 1 (2022/9/19 ): <s>Proje başlangıcı &  Prototip arayüz hazırlanması</s>
-* Day 2 (2022/9/20 ): İşlerin ufak parçalara ayrılması & teknik sorunlar ile ilgili araştırmalar yapılması 
+* Day 2 (2022/9/20 ): <s>İşlerin ufak parçalara ayrılması & teknik sorunlar ile ilgili araştırmalar yapılması </s>
 
-* Day 3 (2022/9/21 ): APİ'nin ve blueprintlerin tasarımı yapılması
+* Day 3 (2022/9/21 ): <s>APİ'nin ve blueprintlerin tasarımı yapılması</s>
 
 * Day 4 (2022/9/22 ): Veritabanın tasarımı ve düzenlenmesi(ORM kullanarak)
 
