@@ -1,11 +1,13 @@
-from typing import Union
+
 
 from fastapi import FastAPI
-from pydantic import BaseModel
+from routers.users import usersroute
+from routers.jobs import jobsroute
 
 
 app = FastAPI()
-
+app.include_router(usersroute, prefix="/users")
+app.include_router(jobsroute, prefix="/jobs")
 
 @app.get("/")
 async def api_index():
