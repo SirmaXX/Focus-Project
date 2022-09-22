@@ -2,17 +2,33 @@
 Python flask ile oluşturulmuş proje yönetim uygulaması
 
 ## Mimari Yapı
+
+
 1. Api
-    + Dockerfile
-    - requirements.txt
+    * Docs Folder
+    * Lib  Folder
+        - mail2.py
+    * Routers Folder
+         - jobs.py
+         - users.py
+    * Dockerfile
+    * main.py
+    * requirements.txt
 2. Webapp
-    + Dockerfile
-    - requirements.txt
+    * Docs Folder
+    * app.py
+    * Dockerfile
+    * requirements.txt
 3. frontend-prototip
-    
+    * img
+      - bootstrap-logo.svg
+    * js
+    * index.html
+    * about.html
+    * login.html
+    * register.html
 
 Burada Web app ,Veritabanı ve APİ bağımsız çalışmak zorunda olduğu için ayrı  servisler şeklinde  hazırladım.Frontend-prototip sadece arayüz için taslak olarak eklendi
-
 
  
 
