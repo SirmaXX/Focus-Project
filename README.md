@@ -1,6 +1,18 @@
 # Focus-Project
 Python flask ile oluşturulmuş proje yönetim uygulaması
 
+
+## Api Nasıl çalışır 
+İlk olarak api ve veritabanı servislerini oluşturalım.
+
+sudo docker-compose build db
+sudo docker-compose build api
+
+Ardından olarak api ve veritabanı servislerini oluşturalım.
+
+sudo docker-compose up db
+sudo docker-compose up api
+
 ## Mimari Yapı
 
 
@@ -8,6 +20,7 @@ Python flask ile oluşturulmuş proje yönetim uygulaması
     * Docs Folder
     * Lib  Folder
         - mail2.py
+        - model.py
     * Routers Folder
          - jobs.py
          - users.py
@@ -19,14 +32,8 @@ Python flask ile oluşturulmuş proje yönetim uygulaması
     * app.py
     * Dockerfile
     * requirements.txt
-3. frontend-prototip
-    * img
-      - bootstrap-logo.svg
-    * js
-    * index.html
-    * about.html
-    * login.html
-    * register.html
+3. frontend-prototip (frontend prototipi)
+
 
 Burada Web app ,Veritabanı ve APİ bağımsız çalışmak zorunda olduğu için ayrı  servisler şeklinde  hazırladım.Frontend-prototip sadece arayüz için taslak olarak eklendi
 

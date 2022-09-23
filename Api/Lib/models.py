@@ -1,31 +1,57 @@
-from email.policy import default
-from sqlalchemy import Boolean, Column, Integer, String,DateTime
+import os
 from flask_sqlalchemy import SQLAlchemy
-import datetime
+from sqlalchemy import create_engine  # type: ignore
+from sqlalchemy.ext.declarative import declarative_base  # type: ignore
+from sqlalchemy.orm import sessionmaker,relationship # type: ignore
+from sqlalchemy import  Column, Integer, String,Date,ForeignKey
+from starlette.requests import Request
 
-db = SQLAlchemy()
+
+DB_URL = os.environ.get('DATABASE_URL')
+
+engine = create_engine(DB_URL, connect_args={"check_same_thread": True})
+
+SessionLocal = sessionmaker( bind=engine)
+
+Base = declarative_base() 
 
 
-class Project(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
-    status = db.Column(db.String(100))
-    created_at= db.Column(Date)
-    comment=db.relationship('Job',backref='project')
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+
+class Project(Base):
+    __tablename__ = "projects"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100))
+    status = Column(String(100))
+    created_at= Column(Date)
+    comments=relationship("Job",primaryjoin="Project.id == Job.project_id",cascade="all, delete-orphan")
 
     def __init__(self, name, status):
      self.name = name
      self.status = status
     
 
-class Job(db.Model):
-  id = db.Column(Integer, primary_key=True)
-  title = db.Column(db.String(80))
-  content = db.Column(db.String(120))
-  session= db.relationship('Session',backref='job')
-  comment=db.relationship('Comment',backref='job')
-  status = db.Column(db.String(100))
-  project_id=db.Column(db.Integer, db.ForeignKey('project.id'))
+
+
+
+class Job(Base):
+  __tablename__ = "jobs"
+
+  id = Column(Integer, primary_key=True)
+  title =Column(String(80))
+  content = Column(String(120))
+  session= relationship("Session",primaryjoin="Job.id == Session.job_id",cascade="all, delete-orphan")
+  comment=relationship("Comment",primaryjoin="Job.id == Comment.job_id",cascade="all, delete-orphan")
+  status = Column(String(100))
+  project_id=Column(Integer,ForeignKey('projects.id'),nullable=False)
 
   def __init__(self, title, content,status):
     self.title = title
@@ -33,30 +59,39 @@ class Job(db.Model):
     self.status = status
 
 
-class Session(db.Model):
-  id = db.Column(db.Integer, primary_key=True)
-  created_at= db.Column(Date)
-  job_id=db.Column(db.Integer, db.ForeignKey('job.id'))
+
+
+
+class Session(Base):
+  __tablename__ = "sessions"
+  
+  id = Column(Integer, primary_key=True)
+  created_at= Column(Date)
+  job_id=Column(Integer,ForeignKey('jobs.id'),nullable=False)
 
 
   
 
 
-class Comment(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(80))
-    created_at= db.Column(Date)
-    job_id=db.Column(db.Integer, db.ForeignKey('job.id'))
+class Comment(Base):
+    __tablename__ = "comments"
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String(80))
+    created_at= Column(Date)
+    job_id=Column(Integer,ForeignKey('jobs.id'),nullable=False)
 
     def __init__(self, title):
      self.title = title
      
 
  
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    password = db.Column(db.String(120), unique=True, nullable=False)
+class User(Base):
+    __tablename__ = "user"
+
+    id = Column(Integer, primary_key=True)
+    username = Column(String(80), unique=True, nullable=False)
+    password = Column(String(120), unique=True, nullable=False)
 
 
     def __init__(self, username,password):
@@ -64,4 +99,5 @@ class User(db.Model):
      self.password =password
 
 
-db.create_all()
+
+
