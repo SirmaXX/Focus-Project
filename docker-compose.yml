@@ -6,7 +6,8 @@ services:
     image: webapp
     build: ./Webapp
     ports:
-      - "81:81"
+      - "5000:5000"
+    
     
 
   api:
@@ -14,11 +15,12 @@ services:
     image: api
     build: ./Api
     ports:
-      - "80:80"
+      - "5001:5001"
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
     depends_on:
       - db
+    
   
   db:
     container_name: db
@@ -34,3 +36,6 @@ services:
 
 volumes:
   pgdata: {}
+
+
+

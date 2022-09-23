@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from fastapi import FastAPI
 from Routers.users import usersroute
 from Routers.jobs import jobsroute
-
+from fastapi.middleware.cors import CORSMiddleware
 import os
 import json
 
@@ -17,3 +17,4 @@ app.include_router(jobsroute, prefix="/jobs")
 @app.get("/")
 async def api_index():
     return {"Hello": "Worlsd"}
+

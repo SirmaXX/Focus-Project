@@ -32,7 +32,7 @@ sudo docker-compose up api
     * app.py
     * Dockerfile
     * requirements.txt
-3. frontend-prototip (frontend prototipi)
+
 
 
 Burada Web app ,Veritabanı ve APİ bağımsız çalışmak zorunda olduğu için ayrı  servisler şeklinde  hazırladım.Frontend-prototip sadece arayüz için taslak olarak eklendi
