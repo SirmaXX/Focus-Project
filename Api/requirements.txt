@@ -5,3 +5,4 @@ typing
 fastapi
 pydantic
 uvicorn
+python-multipart
