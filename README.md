@@ -48,11 +48,11 @@ Burada Web app ,Veritabanı ve APİ bağımsız çalışmak zorunda olduğu içi
 
 * Day 3 (2022/9/21 ): <s>APİ'nin ve blueprintlerin tasarımı yapılması</s>
 
-* Day 4 (2022/9/22 ): Veritabanın tasarımı ve düzenlenmesi(ORM kullanarak)
+* Day 4 (2022/9/22 ): <s>Veritabanın tasarımı ve düzenlenmesi(ORM kullanarak)</s>
 
-* Day 5 (2022/9/23 ): Yapıların düzenlenmesi ve birleştirilmesi 
+* Day 5 (2022/9/23 ):<s> Yapıların düzenlenmesi ve birleştirilmesi </s>
 
 * Day 6 (2022/9/24 ): Yapıların test aşamaları
 
-* Day 7 (2022/9/25 ): Kalan işlerin tamamlanması
+* Day 7 (2022/9/25 ): Kalan işlerin tamamlanması(google lighthouse ile audit testleri vb)
 * Day 7 (2022/9/26 ): Proje teslimi
