@@ -29,6 +29,12 @@ sudo docker-compose up api
     * requirements.txt
 2. Webapp
     * Docs Folder
+    * static Folder
+    * Templates
+         - about.html
+         - index.html
+         - login.html
+         - register.html
     * app.py
     * Dockerfile
     * requirements.txt

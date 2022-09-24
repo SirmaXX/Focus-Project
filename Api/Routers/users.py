@@ -1,3 +1,4 @@
+from operator import truediv
 from fastapi import APIRouter,Depends, Request, Form, status
 from flask import jsonify
 
@@ -62,6 +63,7 @@ async def update_user(req: Request,id:int,db: Session = Depends(get_db)):
 
 @usersroute.get("/delete/{id}")
 async def del_user(req: Request,id:int,db: Session = Depends(get_db)):
+     """ kullanıcınun bilgilerini silen  fonksiyon """
      user = db.query(User).filter_by(id=id).first()
      db.delete(user)
      db.commit()
@@ -69,3 +71,17 @@ async def del_user(req: Request,id:int,db: Session = Depends(get_db)):
    
 
 
+@usersroute.post("/login")
+async def check_user(req: Request,db: Session = Depends(get_db)):
+     """ kullanıcınun bilgilerini kontrol eden  fonksiyon """
+     req_info = await  req.json()
+     username = req_info['username']
+     password = req_info['password']
+     user = db.query(User).filter(User.username ==  username, User.password== password).first()
+     if user != None:
+        return True
+     else :
+        return False                                   
+
+  
+   

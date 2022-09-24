@@ -1,13 +1,17 @@
-from flask import(Flask,jsonify,make_response,request,render_template,abort,make_response)
+from flask import(Flask,request,render_template,session,url_for,redirect)
 import urllib.request, json
 import requests
 
 app = Flask(__name__)
+app.secret_key = 'super secret key'
+app.config['SESSION_TYPE'] = 'filesystem'
+
 
 Api_Url="http://api:5001/users/"
 
 @app.route('/render')
 def render():
+    """ üyeleri listelenmesi için örnek request"""
     response = urllib.request.urlopen(Api_Url)
     data = response.read()
     dict = json.loads(data)
@@ -17,29 +21,71 @@ def render():
 
 @app.route('/render1/<id>')
 def render1(id):
+    """ tekil üyeye ait"""
     response = requests.get(Api_Url+id)
     return response.json()
 
 
  
 
-@app.route('/')
+@app.route('/', methods=["GET", "POST"])
+@app.route('/index', methods=["GET", "POST"])
 def index():
-        return render_template("index.html" )
+    """ anasayfaya ait fonksiyon"""
+    if request.method == "GET": 
+        if 'username' in session:
+          username = session['username']
+          return render_template("index.html" )
+        return "You are not logged in <br><a href = '/login'>" + "click here to log in</a>"
+    else:
+        return render_template("login.html" )
+        
 
 
 @app.route('/about')
 def about():
-    return render_template("about.html" )
+     """ hakkında sayfasına ait fonksiyon"""
+     return render_template("about.html" )
 
 
-@app.route('/login')
+@app.route('/login', methods=["GET", "POST"])
 def login():
-     return render_template("login.html" )
+    """ giriş ait fonksiyon"""
+    if request.method == "GET":
+        return render_template("login.html")
+    elif request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        session['username'] = request.form['username']
+        json_user={"username": username , "password": password }
+        checklogin=requests.post(Api_Url+"login", json =json_user)
+        # checkvar=json.loads( checklogin.text)
+        if (checklogin.text =="true"):
+            return render_template("index.html")
+        else:
+             return "yanlis giris"
+    else:
+         return "Beklenmedik web istegi"
+
+
+
+
+
+
+@app.route('/logout')
+def logout():
+   # remove the username from the session if it is there
+   session.pop('username', None)
+   return redirect(url_for('index'))
+
+
+
+
 
 
 @app.route('/register', methods=["GET", "POST"])
 def register():
+    """ kayıt sayfasına ait fonksiyon """
     if request.method == "GET":
         return render_template("register.html")
     elif request.method == "POST":
