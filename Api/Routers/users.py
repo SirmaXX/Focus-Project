@@ -40,10 +40,7 @@ async def add_user(req: Request,db: Session = Depends(get_db)):
      new_user = User(username=username,password=password)
      db.add(new_user)
      db.commit()
-     return {
-        "status" : "SUCCESS",
-        "data" : req_info
-    }
+     return print(username,password)
 
 
 
