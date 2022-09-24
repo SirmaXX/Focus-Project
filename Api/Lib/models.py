@@ -4,7 +4,6 @@ from sqlalchemy import create_engine  # type: ignore
 from sqlalchemy.ext.declarative import declarative_base  # type: ignore
 from sqlalchemy.orm import sessionmaker,relationship # type: ignore
 from sqlalchemy import  Column, Integer, String,Date,ForeignKey
-from starlette.requests import Request
 
 
 DB_URL = os.environ.get('DATABASE_URL')
@@ -34,12 +33,11 @@ class Project(Base):
     created_at= Column(Date)
     comments=relationship("Job",primaryjoin="Project.id == Job.project_id",cascade="all, delete-orphan")
 
-    def __init__(self, name, status):
+    def __init__(self, name, status,created_at):
      self.name = name
      self.status = status
-    
-
-
+     self.created_at=created_at
+ 
 
 
 class Job(Base):
@@ -53,11 +51,11 @@ class Job(Base):
   status = Column(String(100))
   project_id=Column(Integer,ForeignKey('projects.id'),nullable=False)
 
-  def __init__(self, title, content,status):
+  def __init__(self, title, content,status,project_id):
     self.title = title
     self.content = content
     self.status = status
-
+    self.project_id=project_id
 
 
 
@@ -69,7 +67,11 @@ class Session(Base):
   created_at= Column(Date)
   job_id=Column(Integer,ForeignKey('jobs.id'),nullable=False)
 
-
+  def __init__(self, created_at,job_id):
+     self.created_at = created_at
+     self.job_id =job_id
+    
+ 
   
 
 
@@ -81,9 +83,11 @@ class Comment(Base):
     created_at= Column(Date)
     job_id=Column(Integer,ForeignKey('jobs.id'),nullable=False)
 
-    def __init__(self, title):
+    def __init__(self, title,created_at,job_id):
      self.title = title
-     
+     self.created_at = created_at
+     self.job_id = job_id
+ 
 
  
 class User(Base):

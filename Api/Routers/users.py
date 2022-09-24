@@ -1,12 +1,12 @@
-from operator import truediv
-from fastapi import APIRouter,Depends, Request, Form, status
+from fastapi import APIRouter,Depends, Request
 from flask import jsonify
+from sqlalchemy.orm import Session
+import json
 
 from Lib.models import SessionLocal,User
 usersroute = APIRouter()
 
-from sqlalchemy.orm import Session
-import json
+
 
 # Dependency
 def get_db():
