@@ -3,8 +3,9 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine  # type: ignore
 from sqlalchemy.ext.declarative import declarative_base  # type: ignore
 from sqlalchemy.orm import sessionmaker,relationship # type: ignore
-from sqlalchemy import  Column, Integer, String,Date,ForeignKey
 
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String,Date
+from datetime import datetime
 
 DB_URL = os.environ.get('DATABASE_URL')
 
@@ -24,19 +25,22 @@ def get_db():
 
 
 
+Now = datetime.utcnow()
+
+
 class Project(Base):
     __tablename__ = "projects"
 
     id = Column(Integer, primary_key=True)
     name = Column(String(100))
     status = Column(String(100))
-    created_at= Column(Date)
-    comments=relationship("Job",primaryjoin="Project.id == Job.project_id",cascade="all, delete-orphan")
+    created_at= Column(Date,default=Now)
+    
 
-    def __init__(self, name, status,created_at):
+    def __init__(self, name, status):
      self.name = name
      self.status = status
-     self.created_at=created_at
+    
  
 
 
@@ -47,13 +51,18 @@ class Job(Base):
   title =Column(String(80))
   content = Column(String(120))
   status = Column(String(100))
-  project_id=Column(Integer,ForeignKey('projects.id'),nullable=False)
+  created_at= Column(Date,default=Now)
+  updated_at= Column(Date,default=Now,onupdate=Now)
+  finish_date= Column(Date)
+  project_id=Column(Integer, ForeignKey("projects.id"))
+ 
 
-  def __init__(self, title, content,status,project_id):
-    self.title = title
-    self.content = content
-    self.status = status
-    self.project_id=project_id
+
+#  def __init__(self, title, content,status,project_id):
+#     self.title = title
+#     self.content = content
+ #    self.status = status
+#     self.project_id=project_id
 
   
 
@@ -63,14 +72,21 @@ class Comment(Base):
 
     id = Column(Integer, primary_key=True)
     comment = Column(String(80))
-    created_at= Column(Date)
-    job_id=Column(Integer)
+    created_at= Column(Date,default=Now)
+    job_id=Column(Integer, ForeignKey("jobs.id"))
 
-    def __init__(self, comment,created_at,job_id):
-     self.comment = comment
-     self.created_at = created_at
-     self.job_id = job_id
+  
  
+class Comment(Base):
+    __tablename__ = "comments"
+
+    id = Column(Integer, primary_key=True)
+    comment = Column(String(80))
+    created_at= Column(Date,default=Now)
+    job_id=Column(Integer, ForeignKey("jobs.id"))
+
+  
+
 
  
 class User(Base):
