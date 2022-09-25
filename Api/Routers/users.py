@@ -1,11 +1,12 @@
-from fastapi import APIRouter,Depends, Request, Form, status
+from fastapi import APIRouter,Depends, Request
 from flask import jsonify
+from sqlalchemy.orm import Session
+import json
 
 from Lib.models import SessionLocal,User
 usersroute = APIRouter()
 
-from sqlalchemy.orm import Session
-import json
+
 
 # Dependency
 def get_db():
@@ -40,10 +41,7 @@ async def add_user(req: Request,db: Session = Depends(get_db)):
      new_user = User(username=username,password=password)
      db.add(new_user)
      db.commit()
-     return {
-        "status" : "SUCCESS",
-        "data" : req_info
-    }
+     return print(username,password)
 
 
 
@@ -65,6 +63,7 @@ async def update_user(req: Request,id:int,db: Session = Depends(get_db)):
 
 @usersroute.get("/delete/{id}")
 async def del_user(req: Request,id:int,db: Session = Depends(get_db)):
+     """ kullanıcınun bilgilerini silen  fonksiyon """
      user = db.query(User).filter_by(id=id).first()
      db.delete(user)
      db.commit()
@@ -72,3 +71,17 @@ async def del_user(req: Request,id:int,db: Session = Depends(get_db)):
    
 
 
+@usersroute.post("/login")
+async def check_user(req: Request,db: Session = Depends(get_db)):
+     """ kullanıcınun bilgilerini kontrol eden  fonksiyon """
+     req_info = await  req.json()
+     username = req_info['username']
+     password = req_info['password']
+     user = db.query(User).filter(User.username ==  username, User.password== password).first()
+     if user != None:
+        return True
+     else :
+        return False                                   
+
+  
+   
