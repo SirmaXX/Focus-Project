@@ -3,7 +3,7 @@ from flask import jsonify
 from sqlalchemy.orm import Session
 from datetime import datetime
 import time
-from Lib.models import SessionLocal,Project,Job
+from Lib.models import SessionLocal,Project,Job,Comment
 
 
 # Must use UTC datetime.
@@ -125,3 +125,56 @@ async def del_job(req: Request,id:int,db: Session = Depends(get_db)):
      return "veri silindi"
 
 #JOBS(işlerin) APİ ÜZERİNDEN  CRUD REQUESTLERİ  BİTİŞ
+
+
+#Comments (yorumların) APİ ÜZERİNDEN  CRUD REQUESTLERİ
+@managerroute.get('/comments')
+async def comment_list(req: Request, db: Session = Depends(get_db)):
+    """ istenilen kullanıcının bilgilerini veren fonksiyon"""
+    jobs = db.query(Comment).all()
+    return jobs
+
+
+@managerroute.get("/comments/{id}")
+async def get_comment(req: Request,id:int, db: Session = Depends(get_db)):
+    """ istenilen kullanıcının bilgilerini veren fonksiyon"""
+    comment = db.query(Comment).filter_by(id=id).first()
+    return comment
+
+
+@managerroute.post("/comments/add")
+async def add_comment(req: Request,db: Session = Depends(get_db)):
+     """ kullanıcı ekleyen fonksiyon """
+     req_info = await req.json()
+     comment = req_info['comment'] 
+     job_id=int(req_info['job_id'])
+     comment = Comment( comment=comment,created_at= Now,job_id=job_id)
+     db.add(comment)
+     db.commit()
+     return print(comment)
+
+
+
+
+@managerroute.put("/comments/update/{id}")
+async def update_comment(req: Request,id:int,db: Session = Depends(get_db)):
+   """ kullanıcınun bilgilerini editleyen  fonksiyon """
+   req_info = await  req.json()
+   comment = req_info['comment'] 
+   job_id=int(req_info['job_id'])
+   db.query(Comment).filter_by(id=id).update(
+    dict(comment=comment,job_id=job_id))
+   db.commit()
+   return "item updated"
+
+
+
+@managerroute.get("/comments/delete/{id}")
+async def del_comment(req: Request,id:int,db: Session = Depends(get_db)):
+     """ kullanıcınun bilgilerini silen  fonksiyon """
+     comment = db.query(Comment).filter_by(id=id).first()
+     db.delete(comment)
+     db.commit()
+     return "veri silindi"
+
+#Comments (yorumların) APİ ÜZERİNDEN  CRUD REQUESTLERİ  BİTİŞ

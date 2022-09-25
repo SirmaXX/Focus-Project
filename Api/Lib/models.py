@@ -46,8 +46,6 @@ class Job(Base):
   id = Column(Integer, primary_key=True)
   title =Column(String(80))
   content = Column(String(120))
-  session= relationship("Session",primaryjoin="Job.id == Session.job_id",cascade="all, delete-orphan")
-  comment=relationship("Comment",primaryjoin="Job.id == Comment.job_id",cascade="all, delete-orphan")
   status = Column(String(100))
   project_id=Column(Integer,ForeignKey('projects.id'),nullable=False)
 
@@ -57,21 +55,6 @@ class Job(Base):
     self.status = status
     self.project_id=project_id
 
-
-
-
-class Session(Base):
-  __tablename__ = "sessions"
-  
-  id = Column(Integer, primary_key=True)
-  created_at= Column(Date)
-  job_id=Column(Integer,ForeignKey('jobs.id'),nullable=False)
-
-  def __init__(self, created_at,job_id):
-     self.created_at = created_at
-     self.job_id =job_id
-    
- 
   
 
 
@@ -79,12 +62,12 @@ class Comment(Base):
     __tablename__ = "comments"
 
     id = Column(Integer, primary_key=True)
-    title = Column(String(80))
+    comment = Column(String(80))
     created_at= Column(Date)
-    job_id=Column(Integer,ForeignKey('jobs.id'),nullable=False)
+    job_id=Column(Integer)
 
-    def __init__(self, title,created_at,job_id):
-     self.title = title
+    def __init__(self, comment,created_at,job_id):
+     self.comment = comment
      self.created_at = created_at
      self.job_id = job_id
  
@@ -105,6 +88,5 @@ class User(Base):
 
 
 Base.metadata.create_all(bind=engine)
-
 
 
