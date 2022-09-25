@@ -41,11 +41,10 @@ async def add_project(req: Request,db: Session = Depends(get_db)):
      """ kullanıcı ekleyen fonksiyon """
      req_info = await req.json()
      name = req_info['name']
-     status= req_info['status']
-     project = Project( name= name, status= status)
+     project = Project( name= name)
      db.add(project)
      db.commit()
-     return print(name,status)
+     return print(name)
 
 
 

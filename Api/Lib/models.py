@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine  # type: ignore
 from sqlalchemy.ext.declarative import declarative_base  # type: ignore
 from sqlalchemy.orm import sessionmaker,relationship # type: ignore
-
+from sqlalchemy.sql import expression
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String,Date
 from datetime import datetime
 
@@ -33,13 +33,13 @@ class Project(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(100))
-    status = Column(String(100))
+    status = Column(Boolean, unique=False, default=True)
     created_at= Column(Date,default=Now)
     
 
-    def __init__(self, name, status):
+    def __init__(self, name):
      self.name = name
-     self.status = status
+    
     
  
 
@@ -50,7 +50,7 @@ class Job(Base):
   id = Column(Integer, primary_key=True)
   title =Column(String(80))
   content = Column(String(120))
-  status = Column(String(100))
+  status = Column(Integer, ForeignKey("status.id"))
   created_at= Column(Date,default=Now)
   updated_at= Column(Date,default=Now,onupdate=Now)
   finish_date= Column(Date)
