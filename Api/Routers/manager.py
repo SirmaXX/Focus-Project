@@ -2,7 +2,7 @@ from fastapi import APIRouter,Depends, Request
 from flask import jsonify
 from sqlalchemy.orm import Session
 from datetime import datetime,timedelta
-from Lib.models import SessionLocal,Project,Job,Comment
+from Lib.models import SessionLocal,Project,Job,Comment,Status
 import json
 
 
@@ -180,3 +180,54 @@ async def del_comment(req: Request,id:int,db: Session = Depends(get_db)):
      return "veri silindi"
 
 #Comments (yorumların) APİ ÜZERİNDEN  CRUD REQUESTLERİ  BİTİŞ
+
+#Status (durumlar) APİ ÜZERİNDEN  CRUD REQUESTLERİ
+@managerroute.get('/status')
+async def status_list(req: Request, db: Session = Depends(get_db)):
+    """ istenilen kullanıcının bilgilerini veren fonksiyon"""
+    jobs = db.query(Status).all()
+    return jobs
+
+
+@managerroute.get("/status/{id}")
+async def get_status(req: Request,id:int, db: Session = Depends(get_db)):
+    """ istenilen kullanıcının bilgilerini veren fonksiyon"""
+    comment = db.query(Status).filter_by(id=id).first()
+    return comment
+
+
+
+@managerroute.post("/status/add")
+async def add_status(req: Request,db: Session = Depends(get_db)):
+     """ kullanıcı ekleyen fonksiyon """
+     req_info = await req.json()
+     status_name= req_info['status_name'] 
+     status = Status( status_name=status_name)
+     db.add(status)
+     db.commit()
+     return print(status)
+
+
+
+
+@managerroute.put("/status/update/{id}")
+async def update_status(req: Request,id:int,db: Session = Depends(get_db)):
+   """ kullanıcınun bilgilerini editleyen  fonksiyon """
+   req_info = await  req.json()
+   status_name= req_info['status_name'] 
+   db.query(Status).filter_by(id=id).update(
+    dict(status_name=status_name))
+   db.commit()
+   return "item updated"
+
+
+
+@managerroute.delete("/status/delete/{id}")
+async def del_status(req: Request,id:int,db: Session = Depends(get_db)):
+     """ kullanıcınun bilgilerini silen  fonksiyon """
+     comment = db.query(Status).filter_by(id=id).first()
+     db.delete(comment)
+     db.commit()
+     return "veri silindi"
+
+#Status (durumlar) APİ ÜZERİNDEN  CRUD REQUESTLERİ BİTİŞ

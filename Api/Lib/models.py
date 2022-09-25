@@ -76,15 +76,19 @@ class Comment(Base):
     job_id=Column(Integer, ForeignKey("jobs.id"))
 
   
- 
-class Comment(Base):
-    __tablename__ = "comments"
+
+
+
+
+class Status(Base):
+    __tablename__ = "status"
 
     id = Column(Integer, primary_key=True)
-    comment = Column(String(80))
+    status_name= Column(String(80))
     created_at= Column(Date,default=Now)
-    job_id=Column(Integer, ForeignKey("jobs.id"))
+    
 
+  
   
 
 
