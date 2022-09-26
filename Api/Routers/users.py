@@ -67,7 +67,7 @@ async def update_user(req: Request,id:int,db: Session = Depends(get_db)):
      db.query(User).filter_by(id=id).update(
      dict(username=username, password=password))
      db.commit()
-     return "item updated"
+     return "Kullanıcı bilgileri güncellendi"
    else :
         raise HTTPException(status_code=404,detail="Aranan Kullanıcı yoktur")
  
@@ -79,7 +79,6 @@ async def del_user(req: Request,id:int,db: Session = Depends(get_db)):
     """ kullanıcınun bilgilerini silen  fonksiyon """
     user = db.query(User).filter_by(id=id).first()
     if user != None:
-      user = db.query(User).filter_by(id=id).first()
       db.delete(user)
       db.commit()
       return "veri silindi"
@@ -102,4 +101,5 @@ async def check_user(req: Request,db: Session = Depends(get_db)):
         return False                                   
 
   
-   
+
+
