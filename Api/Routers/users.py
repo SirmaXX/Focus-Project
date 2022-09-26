@@ -1,10 +1,11 @@
-from fastapi import APIRouter,Depends, Request
+
+from fastapi import APIRouter,Depends, Request,HTTPException
 from flask import jsonify
 from sqlalchemy.orm import Session
 import json
 
 from Lib.models import SessionLocal,User
-usersroute = APIRouter()
+usersroute = APIRouter(responses={404: {"description": "Not found"}})
 
 
 
@@ -22,14 +23,22 @@ def get_db():
 async def home(req: Request, db: Session = Depends(get_db)):
     """ bütün kullanıcıların sıralandığı fonksiyon"""
     users = db.query(User).all()
-    return users
+    if not users:
+        raise HTTPException(status_code=404,detail="Kullanıcı bulunamadı")
+    else :
+        return users
+   
 
 
 @usersroute.get("/{id}")
 async def get_user(req: Request,id:int, db: Session = Depends(get_db)):
     """ istenilen kullanıcının bilgilerini veren fonksiyon"""
     user = db.query(User).filter_by(id=id).first()
-    return user
+    if user != None:
+        return user
+    else :
+        raise HTTPException(status_code=404,detail="Aranan Kullanıcı yoktur")
+    
 
 
 @usersroute.post("/add")
@@ -41,7 +50,7 @@ async def add_user(req: Request,db: Session = Depends(get_db)):
      new_user = User(username=username,password=password)
      db.add(new_user)
      db.commit()
-     return print(username,password)
+     
 
 
 
@@ -53,21 +62,30 @@ async def update_user(req: Request,id:int,db: Session = Depends(get_db)):
    req_info = await  req.json()
    username = req_info['username']
    password = req_info['password']
-   db.query(User).filter_by(id=id).update(
-    dict(username=username, password=password))
-   db.commit()
-   return "item updated"
-
-
-
-
-@usersroute.get("/delete/{id}")
-async def del_user(req: Request,id:int,db: Session = Depends(get_db)):
-     """ kullanıcınun bilgilerini silen  fonksiyon """
-     user = db.query(User).filter_by(id=id).first()
-     db.delete(user)
+   user = db.query(User).filter_by(id=id).first()
+   if user != None:
+     db.query(User).filter_by(id=id).update(
+     dict(username=username, password=password))
      db.commit()
-     return "veri silindi"
+     return "item updated"
+   else :
+        raise HTTPException(status_code=404,detail="Aranan Kullanıcı yoktur")
+ 
+
+
+
+@usersroute.delete("/delete/{id}")
+async def del_user(req: Request,id:int,db: Session = Depends(get_db)):
+    """ kullanıcınun bilgilerini silen  fonksiyon """
+    user = db.query(User).filter_by(id=id).first()
+    if user != None:
+      user = db.query(User).filter_by(id=id).first()
+      db.delete(user)
+      db.commit()
+      return "veri silindi"
+    else :
+        raise HTTPException(status_code=404,detail="Aranan Kullanıcı yoktur")
+     
    
 
 
