@@ -21,7 +21,7 @@ def render():
 
 @app.route('/render1/<id>')
 def render1(id):
-    """ tekil üyeye ait"""
+    """ tekil üyeye ait bilgileri getiren request """
     response = requests.get(Api_Url+id)
     return response.json()
 
@@ -74,7 +74,7 @@ def login():
 
 @app.route('/logout')
 def logout():
-   # remove the username from the session if it is there
+   """ çıkış fonksiyonu """
    session.pop('username', None)
    return redirect(url_for('index'))
 
