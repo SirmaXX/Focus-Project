@@ -28,9 +28,11 @@ def get_db():
 Now = datetime.utcnow()
 
 
-class Project(Base):
-    __tablename__ = "projects"
 
+class Project(Base):
+    """Proje oluşturmamızı sağlayan Sınıf"""
+    __tablename__ = "projects"
+    
     id = Column(Integer, primary_key=True)
     name = Column(String(100))
     status = Column(Boolean, unique=False, default=True)
@@ -38,15 +40,21 @@ class Project(Base):
     
 
     def __init__(self, name):
+     """ Dışardan gelen requestler için başlangıç fonksiyonu"""
      self.name = name
     
     
  
 
 
-class Job(Base):
-  __tablename__ = "jobs"
 
+
+
+
+
+class Job(Base):
+  """Proje oluşturmamızı sağlayan Sınıf """
+  __tablename__ = "jobs"
   id = Column(Integer, primary_key=True)
   title =Column(String(80))
   content = Column(String(120))
@@ -58,18 +66,12 @@ class Job(Base):
  
 
 
-#  def __init__(self, title, content,status,project_id):
-#     self.title = title
-#     self.content = content
- #    self.status = status
-#     self.project_id=project_id
-
-  
 
 
 class Comment(Base):
+    """ Yorum oluşturmamızı sağlayan Sınıf """
+     
     __tablename__ = "comments"
-
     id = Column(Integer, primary_key=True)
     comment = Column(String(80))
     created_at= Column(Date,default=Now)
@@ -77,25 +79,23 @@ class Comment(Base):
 
   
 
-
-
+  
 
 class Status(Base):
+    """ İşler için durum oluşturmamızı sağlayan Sınıf """
     __tablename__ = "status"
-
     id = Column(Integer, primary_key=True)
     status_name= Column(String(80))
     created_at= Column(Date,default=Now)
     
 
-  
-  
+    
 
 
- 
+
 class User(Base):
+    """ Kullanıcı oluşturmamızı sağlayan Sınıf """
     __tablename__ = "user"
-
     id = Column(Integer, primary_key=True)
     username = Column(String(80), unique=True, nullable=False)
     password = Column(String(120), unique=True, nullable=False)
